@@ -32,7 +32,7 @@ CREATE TABLE booking (
     payment DECIMAL(10, 2) NOT NULL,
     booking_status ENUM('BOOKED', 'CLOSED') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Confirmation_code CHAR(36) NOT NULL,
+    Confirmation_code CHAR(36) NOT NULL DEFAULT (UUID()),
 	FOREIGN KEY (username) REFERENCES customer(username),
     FOREIGN KEY (roomId) REFERENCES room(roomId)
 );

@@ -7,7 +7,7 @@ const FindBooking = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [bookings, setBookings] = useState([]); // Updated: Array to store multiple bookings
+  const [bookings, setBookings] = useState([]);
 
   const handleInputChange = (event) => {
     setUsername(event.target.value);
@@ -19,7 +19,7 @@ const FindBooking = () => {
 
     try {
       const data = await getBookingByUsername(username);
-      setBookings(data); // Store the array of bookings
+      setBookings(data); 
       setError(null);
     } catch (error) {
       setBookings([]);
@@ -37,7 +37,6 @@ const FindBooking = () => {
     try {
       await cancelBooking(bookingId);
       setSuccessMessage("Booking has been cancelled successfully!");
-      // Remove the cancelled booking from the list
       setBookings((prevBookings) =>
         prevBookings.filter((booking) => booking.bookingId !== bookingId)
       );
@@ -74,7 +73,7 @@ const FindBooking = () => {
           <div>Finding your booking...</div>
         ) : error ? (
           <div className="text-danger">Error: {error}</div>
-        ) : bookings.length > 0 ? ( // Check if bookings exist
+        ) : bookings.length > 0 ? (
           <div className="col-md-6 mt-4 mb-5">
             <h3>Booking Information</h3>
             {bookings.map((booking) => (

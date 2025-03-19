@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -11,8 +11,8 @@ const Login = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [showModal, setShowModal] = useState(false); // State for modal visibility
-  const navigate = useNavigate(); // Initialize navigate
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -75,7 +75,7 @@ const Login = () => {
           setTimeout(() => navigate("/home"), 2000);
         } else if (formData.role === "Admin") {
           setSuccessMessage("Login successful!");
-          setShowModal(true); // Show the modal for Admin role
+          setShowModal(true);
         }
       }
     } catch (error) {
@@ -92,8 +92,8 @@ const Login = () => {
   };
 
   const navigateTo = (path) => {
-    setShowModal(false); // Close the modal
-    navigate(path); // Navigate to the selected path
+    setShowModal(false);
+    navigate(path); 
   };
 
   return (

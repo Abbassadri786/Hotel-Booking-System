@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { parseISO } from "date-fns";
 import DateSlider from "../common/DateSlider";
-import { cancelBooking } from "../utils/ApiFunctions"; // Import the cancelBooking API function
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { cancelBooking } from "../utils/ApiFunctions";
+import { useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 
 const BookingsTable = ({ bookingInfo }) => {
   const [filteredBookings, setFilteredBookings] = useState([]);
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
 
   const filterBookings = (startDate, endDate) => {
     let filtered = bookingInfo;
@@ -27,11 +28,9 @@ const BookingsTable = ({ bookingInfo }) => {
   const handleBookingCancellation = async (bookingId) => {
     if (window.confirm("Are you sure you want to cancel this booking?")) {
       try {
-        // Call the cancelBooking API
         await cancelBooking(bookingId);
         alert("Booking canceled successfully!");
 
-        // Re-render filtered bookings excluding the canceled one
         const updatedBookings = filteredBookings.filter(
           (booking) => booking.bookingId !== bookingId
         );
@@ -50,6 +49,22 @@ const BookingsTable = ({ bookingInfo }) => {
 
   return (
     <section className="p-4">
+      {/* Back Arrow Button */}
+      <div className="container mb-3">
+        <button
+          className="btn btn-link text-decoration-none text-dark"
+          onClick={() => navigate("/admin")}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            fontSize: "16px",
+          }}
+        >
+          <FaArrowLeft /> Back to Admin
+        </button>
+      </div>
+
       <DateSlider onDateChange={filterBookings} onFilterChange={filterBookings} />
       <table className="table table-bordered table-hover shadow">
         <thead>
@@ -98,16 +113,6 @@ const BookingsTable = ({ bookingInfo }) => {
           )}
         </tbody>
       </table>
-
-      {/* Back Button */}
-      <div className="d-flex justify-content-end mt-4">
-        <button
-          className="btn btn-secondary"
-          onClick={() => navigate("/admin")} // Navigate back to the admin page
-        >
-          Back to Admin
-        </button>
-      </div>
     </section>
   );
 };

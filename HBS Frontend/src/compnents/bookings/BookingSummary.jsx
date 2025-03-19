@@ -1,40 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { bookRoom } from "../utils/ApiFunctions";
 
-const BookingSummary = ({ booking = {}, payment, isFormValid, onConfirm }) => {
+const BookingSummary = ({ booking = {}, payment, isFormValid }) => {
   const checkinDate = moment(booking.checkinDate);
   const checkoutDate = moment(booking.checkoutDate);
   const numberOfDays = checkoutDate.diff(checkinDate, "days");
 
-  const [isBookingConfirmed, setIsBookingConfirmed] = useState(false);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [confirmationCode, setConfirmationCode] = useState("");
+  const [isProcessingBooking, setIsProcessingBooking] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleConfirmBooking = async () => {
-    setIsProcessingPayment(true);
+  const handleBookNow = async () => {
+    setIsProcessingBooking(true);
+    setErrorMessage("");
     try {
-      console.log("Booking Object:", booking);
-
-      const bookingResponse = await bookRoom(booking);
-      if (bookingResponse) {
-        setIsBookingConfirmed(true);
-        onConfirm();
+      const bookingData = {
+        bookingId: booking.bookingId,
+        username: booking.username,
+        roomId: parseInt(booking.roomId, 10),
+        checkinDate: booking.checkinDate,
+        checkoutDate: booking.checkoutDate,
+        totalPerson: parseInt(booking.totalPerson, 10),
+        payment: payment,
+        confirmationCode: booking.confirmationCode,
+        bookingStatus: "BOOKED",
+      };
+  
+      const bookingResponse = await bookRoom(bookingData);
+      if (bookingResponse && bookingResponse.ConfirmationCode) {
+        setConfirmationCode(bookingResponse.ConfirmationCode);
+        setShowModal(true);
       }
     } catch (error) {
-      console.error("Error confirming booking:", error);
-      setIsProcessingPayment(false);
+      console.error("Error while booking:", error);
+      setErrorMessage("Failed to book the room. Please try again.");
+    } finally {
+      setIsProcessingBooking(false);
     }
   };
+  
 
-  useEffect(() => {
-    if (isBookingConfirmed) {
-      console.log("Navigating to /booking-success");
-      navigate("/booking-success");
-    }
-  }, [isBookingConfirmed, navigate]);
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <div className="card card-body mt-5">
@@ -65,33 +76,38 @@ const BookingSummary = ({ booking = {}, payment, isFormValid, onConfirm }) => {
       </p>
 
       {payment > 0 && numberOfDays > 0 ? (
-        <>
-          {isFormValid && !isBookingConfirmed ? (
-            <Button variant="success" onClick={handleConfirmBooking}>
-              {isProcessingPayment ? (
-                <>
-                  <span
-                    className="spinner-border spinner-border-sm mr-2"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                  Booking Confirmed, redirecting to payment...
-                </>
-              ) : (
-                "Confirm Booking & Proceed to Payment"
-              )}
-            </Button>
-          ) : isBookingConfirmed ? (
-            <div className="d-flex justify-content-center align-items-center">
-              <div className="spinner-border text-primary" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>
-          ) : null}
-        </>
+        isFormValid ? (
+          <Button
+            variant="success"
+            onClick={handleBookNow}
+            disabled={isProcessingBooking}
+          >
+            {isProcessingBooking ? "Booking..." : "Book Now"}
+          </Button>
+        ) : null
       ) : (
-        <p className="text-danger">Check-out date must be after check-in date.</p>
+        <p className="text-danger">Please ensure all booking details are valid.</p>
       )}
+
+      {errorMessage && <p className="text-danger">{errorMessage}</p>}
+
+      {/* Bootstrap Modal */}
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Booking Confirmed</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Your booking has been successfully completed!</p>
+          <p>
+            <strong>Confirmation Code:</strong> {confirmationCode}
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={handleCloseModal}>
+            Okay
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

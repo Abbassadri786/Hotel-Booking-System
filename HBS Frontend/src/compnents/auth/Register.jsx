@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import for navigation
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -13,14 +13,14 @@ const Register = () => {
     mobile: "",
     gender: "",
     dob: "",
-    accessCode: "", // Only for admin registration
+    accessCode: "",
   });
 
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(""); // For success message
+  const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate(); // For redirecting to login page
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +54,7 @@ const Register = () => {
     const errorMsg = validateFields();
     if (errorMsg) {
       setError(errorMsg);
-      setSuccess(""); // Clear success message
+      setSuccess("");
       return;
     }
 
@@ -66,14 +66,14 @@ const Register = () => {
     for (const field of requiredFields) {
       if (formData[field] === "") {
         setError("All required fields must be filled out");
-        setSuccess(""); // Clear success message
+        setSuccess("");
         return;
       }
     }
 
     if (formData.role === "Admin" && formData.accessCode !== "admin@1234") {
       setError("Wrong access code entered");
-      setSuccess(""); // Clear success message
+      setSuccess("");
       return;
     }
 
@@ -113,10 +113,10 @@ const Register = () => {
 
       if (response.status === 200) {
         setSuccess("Registration successful!");
-        setError(""); // Clear error message
+        setError("");
         setTimeout(() => {
-          navigate("/login"); // Redirect to login after success
-        }, 2000); // Redirect after 2 seconds
+          navigate("/login");
+        }, 2000); 
       }
     } catch (error) {
       console.error(
@@ -124,7 +124,7 @@ const Register = () => {
         error.response ? error.response.data : error.message
       );
       setError("Registration failed. Please try again.");
-      setSuccess(""); // Clear success message
+      setSuccess("");
     }
   };
 

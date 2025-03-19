@@ -4,8 +4,8 @@ import RoomPaginator from "../common/RoomPaginator";
 import RoomFilter from "../common/RoomFilter";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Col, Row } from "react-bootstrap";
-import { FaTrashAlt, FaEye, FaEdit, FaPlus } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom"; // Added useNavigate for navigation
+import { FaTrashAlt, FaEye, FaEdit, FaPlus, FaArrowLeft } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
 const ExistingRooms = () => {
   const [rooms, setRooms] = useState([]);
@@ -16,12 +16,12 @@ const ExistingRooms = () => {
   const [selectedRoomType, setSelectedRoomType] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [showModal, setShowModal] = useState(false); // Modal visibility state
-  const [selectedRoomId, setSelectedRoomId] = useState(null); // Selected room ID for deletion
-  const navigate = useNavigate(); // Added navigate function for Back button
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchRooms(); // Initial fetch for all rooms
+    fetchRooms();
   }, []);
 
   const fetchRooms = async () => {
@@ -43,7 +43,7 @@ const ExistingRooms = () => {
 
   useEffect(() => {
     if (selectedRoomType === "") {
-      setFilteredRooms(rooms); // Show all rooms if no type is selected
+      setFilteredRooms(rooms);
     } else {
       const filtered = rooms.filter((room) => room.roomType === selectedRoomType);
       setFilteredRooms(filtered);
@@ -55,24 +55,20 @@ const ExistingRooms = () => {
   };
 
   const openModal = (id) => {
-    setSelectedRoomId(id); // Set the room ID to delete
-    setShowModal(true); // Show the modal
+    setSelectedRoomId(id);
+    setShowModal(true);
   };
 
   const handleDeleteConfirm = async () => {
     try {
-      await deleteRoom(selectedRoomId); // Delete the selected room
+      await deleteRoom(selectedRoomId);
       setSuccessMessage(`Room with ID ${selectedRoomId} was deleted successfully.`);
 
-      // Fetch updated list of rooms after deletion
       fetchRooms();
-
-      // Close the modal
       setShowModal(false);
     } catch (error) {
       setErrorMessage(`Error deleting room: ${error.message}`);
     } finally {
-      // Reset success and error messages after 3 seconds
       setTimeout(() => {
         setSuccessMessage("");
         setErrorMessage("");
@@ -91,6 +87,22 @@ const ExistingRooms = () => {
 
   return (
     <>
+      {/* Back Arrow Button */}
+      <div className="container mt-3">
+        <button
+          className="btn btn-link text-decoration-none text-dark"
+          onClick={() => navigate("/admin")}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            fontSize: "16px",
+          }}
+        >
+          <FaArrowLeft /> Back to Admin
+        </button>
+      </div>
+
       <div className="container col-md-8 col-lg-6">
         {successMessage && <p className="alert alert-success mt-5">{successMessage}</p>}
         {errorMessage && <p className="alert alert-danger mt-5">{errorMessage}</p>}
@@ -184,13 +196,6 @@ const ExistingRooms = () => {
               onPageChange={handlePaginationClick}
             />
           </section>
-
-          {/* Back Button */}
-          <div className="d-flex justify-content-end mt-4">
-            <button className="btn btn-secondary" onClick={() => navigate("/admin")}>
-              Back to Admin
-            </button>
-          </div>
         </>
       )}
 

@@ -1,7 +1,6 @@
 package com.hbs.HBS.repository;
 
 import java.util.List;
-import java.util.UUID;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -26,8 +25,7 @@ public class BookingRepository {
     // Create a new booking
     public int save(Booking booking) {
         String sql = "INSERT INTO booking (username, roomId, checkinDate, checkoutDate, totalPerson, payment, booking_status, confirmation_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        String confirmationCode = UUID.randomUUID().toString();
-        return jdbcTemplate.update(sql, booking.getUsername(), booking.getRoomId(), booking.getCheckinDate(), booking.getCheckoutDate(), booking.getTotalPerson(), booking.getPayment(), booking.getBookingStatus(), confirmationCode);
+        return jdbcTemplate.update(sql, booking.getUsername(), booking.getRoomId(), booking.getCheckinDate(), booking.getCheckoutDate(), booking.getTotalPerson(), booking.getPayment(), booking.getBookingStatus(), booking.getConfirmationCode());
     }
 
     // Read -> Get All bookings
@@ -75,8 +73,8 @@ public class BookingRepository {
 
     // Update booking
     public int update(Booking booking) {
-        String sql = "UPDATE booking SET username = ?, roomId = ?, checkinDate = ?, checkoutDate = ?, totalPerson = ?, payment = ?, booking_status = ?, confirmation_code = ? WHERE bookingId = ?";
-        return jdbcTemplate.update(sql, booking.getUsername(), booking.getRoomId(), booking.getCheckinDate(), booking.getCheckoutDate(), booking.getTotalPerson(), booking.getPayment(), booking.getBookingStatus(), booking.getConfirmationCode(), booking.getBookingId());
+        String sql = "UPDATE booking SET username = ?, roomId = ?, checkinDate = ?, checkoutDate = ?, totalPerson = ?, payment = ?, booking_status = ?  WHERE bookingId = ?";
+        return jdbcTemplate.update(sql, booking.getUsername(), booking.getRoomId(), booking.getCheckinDate(), booking.getCheckoutDate(), booking.getTotalPerson(), booking.getPayment(), booking.getBookingStatus(), booking.getBookingId());
     }
 
     // Delete booking by Id
