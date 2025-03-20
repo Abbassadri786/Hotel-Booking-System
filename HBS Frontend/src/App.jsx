@@ -19,9 +19,9 @@ import Checkout from './compnents/bookings/Checkout';
 import BookingSuccess from './compnents/bookings/BookingSuccess';
 import Bookings from './compnents/bookings/Bookings';
 import FindBooking from './compnents/bookings/FindBooking';
-import SignUp from './compnents/auth/Register'; // Import the SignUp component
 import Login from './compnents/auth/Login'; // Import the Login component
 import Register from './compnents/auth/Register';
+import FeedbackForm from './compnents/feedback/FeedbackForm';
 
 function App() {
     return (
@@ -38,6 +38,7 @@ function App() {
                     <Route path="/browse-all-rooms" element={<RoomListing />} />
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/book-room/:id" element={<Checkout />} />
+                    <Route path="/feedback" element={<FeedbackForm />} />
                     <Route path="/booking-success" element={<BookingSuccess />} />
                     <Route path="/existing-bookings" element={<Bookings />} />
                     <Route path="/find-booking" element={<FindBooking />} />

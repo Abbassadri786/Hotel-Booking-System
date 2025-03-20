@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import { Button, Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom"; // Import for navigation
 import { bookRoom } from "../utils/ApiFunctions";
 
 const BookingSummary = ({ booking = {}, payment, isFormValid }) => {
@@ -12,6 +13,8 @@ const BookingSummary = ({ booking = {}, payment, isFormValid }) => {
   const [confirmationCode, setConfirmationCode] = useState("");
   const [isProcessingBooking, setIsProcessingBooking] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleBookNow = async () => {
     setIsProcessingBooking(true);
@@ -28,7 +31,7 @@ const BookingSummary = ({ booking = {}, payment, isFormValid }) => {
         confirmationCode: booking.confirmationCode,
         bookingStatus: "BOOKED",
       };
-  
+
       const bookingResponse = await bookRoom(bookingData);
       if (bookingResponse && bookingResponse.ConfirmationCode) {
         setConfirmationCode(bookingResponse.ConfirmationCode);
@@ -41,10 +44,13 @@ const BookingSummary = ({ booking = {}, payment, isFormValid }) => {
       setIsProcessingBooking(false);
     }
   };
-  
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const handleFeedbackClick = () => {
+    navigate("/feedback"); // Redirect to the FeedbackForm page
   };
 
   return (
@@ -105,6 +111,9 @@ const BookingSummary = ({ booking = {}, payment, isFormValid }) => {
         <Modal.Footer>
           <Button variant="success" onClick={handleCloseModal}>
             Okay
+          </Button>
+          <Button variant="primary" onClick={handleFeedbackClick}>
+            Give Feedback!
           </Button>
         </Modal.Footer>
       </Modal>

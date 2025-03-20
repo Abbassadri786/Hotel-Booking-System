@@ -170,3 +170,35 @@ export async function getAvailableRooms(roomType){
 	}
   
 }
+export async function getAllFeedbacks() {
+  try {
+    const result = await api.get(`/api/feedbacks`);
+    console.log("Raw API Response:", result);
+    if (Array.isArray(result.data)) {
+      console.log("Feedback data fetched successfully:", result.data);
+      return result.data;
+    } else {
+      console.warn("Unexpected API response format:", result);
+      return [];
+    }
+  } catch (error) {
+    if (error.response) {
+      console.error("Error response from server:", error.response.data);
+    } else {
+      console.error("Error fetching feedbacks:", error.message);
+    }
+    throw new Error("Error fetching feedbacks. Please try again later.");
+  }
+}
+ 
+// Submit feedback
+export async function submitFeedback(feedback) {
+  try {
+    const response = await api.post('/api/feedbacks', feedback);
+    console.log("Raw API Response:", response);
+    return response.data;
+  } catch (error) {
+    console.error("Error submitting feedback:", error.response ? error.response.data : error.message);
+    throw new Error("Error submitting feedback. Please try again later.");
+  }
+}
