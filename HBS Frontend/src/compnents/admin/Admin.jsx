@@ -37,6 +37,9 @@ const Admin = () => {
             <Link to="/existing-bookings" className="btn btn-outline-success btn-lg">
               Manage Bookings
             </Link>
+            <Link to="/existing-customers" className="btn btn-outline-info btn-lg">
+              Manage Customers
+            </Link>
           </div>
         </div>
         <div className="card-footer text-muted text-center">

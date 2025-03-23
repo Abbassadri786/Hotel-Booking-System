@@ -52,8 +52,8 @@ public class CustomerRepository {
 
     // Update customer
     public int update(Customer customer) {
-        String sql = "UPDATE customer SET username = ?, email = ?, password = ?, phone = ?, gender = ?, dob = ? WHERE id = ?";
-        return jdbcTemplate.update(sql, customer.getUsername(), customer.getEmail(), customer.getPassword(), customer.getPhone(), customer.getGender(), customer.getDob(), customer.getId());
+        String sql = "UPDATE customer SET username = ?, email = ?, phone = ?, gender = ?, dob = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, customer.getUsername(), customer.getEmail(), customer.getPhone(), customer.getGender(), customer.getDob(), customer.getId());
     }
 
     // Delete customer by Id

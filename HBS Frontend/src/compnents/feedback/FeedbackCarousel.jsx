@@ -1,47 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Carousel } from 'react-bootstrap';
 import { getAllFeedbacks } from '../utils/ApiFunctions';
- 
+
 const FeedbackCarousel = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
- 
+
   useEffect(() => {
     setIsLoading(true);
     getAllFeedbacks()
       .then((data) => {
-        console.log("Feedback data received:", data); // Log data received from API
+        console.log("Feedback data received:", data);
         if (Array.isArray(data) && data.length > 0) {
-          setFeedbacks(data); // Set feedback data if valid
+          setFeedbacks(data);
         } else {
           console.warn("Feedback data is empty or invalid:", data);
-          setFeedbacks([]); // Fallback for empty feedbacks
+          setFeedbacks([]);
         }
         setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching feedbacks:", error.message);
-        setErrorMessage(error.message); // Set error message for display
+        setErrorMessage(error.message);
         setIsLoading(false);
       });
   }, []);
- 
+
   if (isLoading) {
-    return <div className="mt-5">Loading feedback...</div>; // Loading state
+    return <div className="mt-5">Loading feedback...</div>;
   }
- 
+
   if (errorMessage) {
-    return <div className="text-danger mb-5 mt-5">Error: {errorMessage}</div>; // Error state
+    return <div className="text-danger mb-5 mt-5">Error: {errorMessage}</div>;
   }
- 
+
   if (!feedbacks || feedbacks.length === 0) {
-    return <div className="mt-5">No feedbacks available to display.</div>; // Empty state
+    return <div className="mt-5">No feedbacks available to display.</div>;
   }
- 
+
   return (
     <section className="bg-light mb-5 mt-5 shadow">
       <Container>
+        <h5 className="hotel color text-center mb-3 d-block h5">User Feedback</h5>
         <Carousel indicators={false}>
           {[...Array(Math.ceil(feedbacks.length / 4))].map((_, index) => (
             <Carousel.Item key={index}>
@@ -50,9 +51,16 @@ const FeedbackCarousel = () => {
                   <Col key={idx} className="mb-4" xs={12} md={6} lg={3}>
                     <Card>
                       <Card.Body>
-                        <Card.Text>"{feedback.review}"</Card.Text>
+                        <Card.Text>
+                          <strong>{feedback.name}</strong> {/* Displaying the name */}
+                        </Card.Text>
+                        <Card.Text style={{ color: "darkgoldenrod" }}>
+                          {feedback.review}
+                        </Card.Text>
                         <Card.Footer>
-                          <small className="text-muted">-<h7>Overall Rating : </h7> { feedback.rating}</small>
+                          <small>
+                            <span>Overall Rating:</span> {feedback.rating}
+                          </small>
                         </Card.Footer>
                       </Card.Body>
                     </Card>
@@ -66,5 +74,5 @@ const FeedbackCarousel = () => {
     </section>
   );
 };
- 
+
 export default FeedbackCarousel;

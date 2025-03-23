@@ -109,6 +109,77 @@ throw new Error('Error fetching room ${error.message}')
   
 }
 
+// Get all customers
+export async function getAllCustomers() {
+  try {
+    const result = await api.get("/api/customers");
+    console.log("Raw API Response:", result);
+
+    return Array.isArray(result.data) ? result.data : [];
+  } catch (error) {
+    console.error("Error fetching customers:", error.response ? error.response.data : error.message);
+    throw new Error("Error fetching customers. Please try again later.");
+  }
+}
+
+// Delete customer by ID
+export async function deleteCustomer(id) {
+  try {
+    const result = await api.delete(`/api/customers/${id}`);
+    return result.data;
+  } catch (error) {
+    console.error(`Error deleting customer: ${error.message}`);
+    throw new Error(`Error deleting customer. Please try again later.`);
+  }
+}
+
+// Update customer by ID
+export async function updateCustomer(id, customerData) {
+  const payload = {
+    username: customerData.username,
+    email: customerData.email,
+    phone: customerData.phone,
+    gender: customerData.gender,
+    dob: customerData.dob,
+  };
+  try {
+    const response = await api.put(`/api/customers/${id}`, payload, {
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      console.error(`Error: Unexpected status code ${response.status}`);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error updating customer:", error);
+    throw new Error("Error updating customer. Please try again later.");
+  }
+}
+
+// Get customer by ID
+export async function getCustomerById(id) {
+  try {
+    const result = await api.get(`/api/customers/id/${id}`);
+    return result.data;
+  } catch (error) {
+    console.error(`Error fetching customer by ID: ${error.message}`);
+    throw new Error("Error fetching customer. Please try again later.");
+  }
+}
+
+// Search customer by username
+export async function searchCustomerByUsername(username) {
+  try {
+    const result = await api.get(`/api/customers/username/${username}`);
+    return result.data;
+  } catch (error) {
+    console.error(`Error searching customer by username: ${error.message}`);
+    throw new Error("Error searching customer. Please try again later.");
+  }
+}
+
 export async function bookRoom(booking) {
   try {
     const response = await api.post(`/api/bookings`, booking);

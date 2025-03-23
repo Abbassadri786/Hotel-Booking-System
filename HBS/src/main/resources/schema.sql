@@ -49,6 +49,7 @@ CREATE TABLE admin (
 -- Table 5: Feedback
 CREATE TABLE feedback (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
     rating INT CHECK (rating BETWEEN 1 AND 5) NOT NULL,
     review TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

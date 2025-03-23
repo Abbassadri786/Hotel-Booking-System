@@ -23,7 +23,8 @@ INSERT INTO admin (name, email, mobile, password) VALUES
 ('Admin2', 'admin2@example.com', '2233445566', 'adminpass2');
 
 -- Insert values for the feedback table
-INSERT INTO feedback (rating, review) VALUES
-(5, 'Excellent service!'),
-(4, 'Very good experience.'),
-(3, 'Average stay, could be improved.');
+INSERT INTO feedback (name, rating, review) VALUES
+('John Doe', 5, 'Excellent service!'),
+('Jane Doe', 4, 'Very good experience.'),
+('Anonymous', 3, 'Average stay, could be improved.');
+

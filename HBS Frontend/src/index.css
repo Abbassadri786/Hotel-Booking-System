@@ -5,6 +5,9 @@ body {
 .card {
   opacity: 0.9;
 }
+.hotel.color {
+  color: rgb(146, 114, 106);
+}
 
 /* Navigation bar definitions */
  .navbar{
@@ -236,20 +239,60 @@ body {
   height: 60px;
   text-align: center;
 }
+/* Style and adjust the next icon */
+.carousel-control-next-icon {
+  background-color: lightgrey;
+  border-radius: 50%;
+  padding: 3px; /* Reduce padding for a smaller icon */
+  transition: transform 0.3s ease-in-out;
+  pointer-events: all;
+  width: 25px; /* Make the icon smaller */
+  height: 25px; /* Make the icon smaller */
+}
+
+/* Move the next icon further to the right */
+.carousel-control-next {
+  right: -50px; /* Adjust to move further to the right */
+}
+
+/* On hover, slightly enlarge the next icon */
+.carousel-control-next-icon:hover {
+  transform: scale(1.15);
+  background-color: #d3d3d3;
+}
+
+/* Style and adjust the previous icon */
+.carousel-control-prev-icon {
+  background-color: lightgrey;
+  border-radius: 50%;
+  padding: 3px; /* Reduce padding for a smaller icon */
+  transition: transform 0.3s ease-in-out;
+  pointer-events: all;
+  width: 25px; /* Make the icon smaller */
+  height: 25px; /* Make the icon smaller */
+}
+
+/* Move the previous icon further to the left */
+.carousel-control-prev {
+  left: -50px; /* Adjust to move further to the left */
+}
+
+/* On hover, slightly enlarge the previous icon */
+.carousel-control-prev-icon:hover {
+  transform: scale(1.15);
+  background-color: #d3d3d3;
+}
 
 
 
-
-
-/* Remove underline for the hotel-color link */
 a.hotel-color {
-  text-decoration: none !important; /* Force removal of underline */
-  color: rgb(169, 77, 123) !important; /* Ensure the correct color is applied */
+  text-decoration: none !important;
+  color: rgb(169, 77, 123) !important;
 }
 
 a.hotel-color:hover {
-  text-decoration: none !important; /* No underline on hover */
-  color: rgb(137, 127, 132) !important; /* Optional hover color */
+  text-decoration: none !important;
+  color: rgb(137, 127, 132) !important;
 }
 
 

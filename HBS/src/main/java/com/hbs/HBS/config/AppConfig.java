@@ -67,16 +67,17 @@ public class AppConfig {
 
     @Bean
     public Feedback feedback1() {
-        return new Feedback(1, 5, "Excellent service!", Timestamp.valueOf(LocalDateTime.now()));
+        return new Feedback(1, "John Doe", 5, "Excellent service!", Timestamp.valueOf(LocalDateTime.now()));
     }
 
     @Bean
     public Feedback feedback2() {
-        return new Feedback(2, 4, "Very good experience.", Timestamp.valueOf(LocalDateTime.now()));
+        return new Feedback(2, "Jane Doe", 4, "Very good experience.", Timestamp.valueOf(LocalDateTime.now()));
     }
 
     @Bean
     public Feedback feedback3() {
-        return new Feedback(3, 3, "Average stay, could be improved.", Timestamp.valueOf(LocalDateTime.now()));
+        return new Feedback(3, "Anonymous", 3, "Average stay, could be improved.", Timestamp.valueOf(LocalDateTime.now()));
     }
+
 }

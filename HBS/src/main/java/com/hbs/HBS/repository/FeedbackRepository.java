@@ -18,13 +18,13 @@ public class FeedbackRepository {
     }
 
     // RowMapper for Feedback
-    private RowMapper<Feedback> feedbackRowMapper = (rs, rowNum) -> 
-        new Feedback(rs.getInt("id"), rs.getInt("rating"), rs.getString("review"), rs.getTimestamp("created_at"));
+    private RowMapper<Feedback> feedbackRowMapper = (rs, rowNum) ->
+        new Feedback(rs.getInt("id"), rs.getString("name"), rs.getInt("rating"), rs.getString("review"), rs.getTimestamp("created_at"));
 
     // Create a new feedback
     public int save(Feedback feedback) {
-        String sql = "INSERT INTO feedback (rating, review) VALUES (?, ?)";
-        return jdbcTemplate.update(sql, feedback.getRating(), feedback.getReview());
+        String sql = "INSERT INTO feedback (name, rating, review) VALUES (?, ?, ?)";
+        return jdbcTemplate.update(sql, feedback.getName(), feedback.getRating(), feedback.getReview());
     }
 
     // Read -> Get All feedbacks
@@ -39,9 +39,9 @@ public class FeedbackRepository {
         return jdbcTemplate.queryForObject(sql, feedbackRowMapper, id);
     }
 
-    // Update feedback -> findById
+    // Update feedback
     public int update(Feedback feedback) {
-        String sql = "UPDATE feedback SET rating = ?, review = ? WHERE id = ?";
-        return jdbcTemplate.update(sql, feedback.getRating(), feedback.getReview(), feedback.getId());
+        String sql = "UPDATE feedback SET name = ?, rating = ?, review = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, feedback.getName(), feedback.getRating(), feedback.getReview(), feedback.getId());
     }
 }

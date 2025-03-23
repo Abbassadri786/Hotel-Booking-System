@@ -19,7 +19,7 @@ public class Customer {
     @NotBlank(message = "Email is required")
     private String email;
     
-    @NotBlank(message = "Password is required")
+
     @Size(min = 8, message = "Password should be at least 8 characters long")
     private String password;
     
@@ -104,7 +104,7 @@ public class Customer {
     public Customer() {
         super();
     }
-    
+
     public Customer(String username, String email, String password, String phone, String gender, Date dob) {
         super();
         this.username = username;
