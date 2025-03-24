@@ -33,7 +33,7 @@ public class FeedbackRepositoryTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        feedback = new Feedback(1, 5, "Excellent service", new Timestamp(System.currentTimeMillis()));
+        feedback = new Feedback(1,"john_doe", 5, "Excellent service", new Timestamp(System.currentTimeMillis()));
     }
 
     // Positive Test Cases
@@ -87,7 +87,7 @@ public class FeedbackRepositoryTest {
             .thenThrow(new RuntimeException("Invalid data"));
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            feedbackRepository.save(new Feedback(0, -1, null, null));
+            feedbackRepository.save(new Feedback(0,null, -1, null, null));
         });
 
         assertEquals("Invalid data", exception.getMessage());
@@ -123,7 +123,7 @@ public class FeedbackRepositoryTest {
         when(jdbcTemplate.update(anyString(), anyInt(), anyString(), anyInt()))
             .thenReturn(0);
 
-        int result = feedbackRepository.update(new Feedback(999, 3, "Average service", new Timestamp(System.currentTimeMillis())));
+        int result = feedbackRepository.update(new Feedback(999,"john_doe", 3, "Average service", new Timestamp(System.currentTimeMillis())));
         assertEquals(0, result);
         verify(jdbcTemplate, times(1)).update(anyString(), anyInt(), anyString(), anyInt());
     }

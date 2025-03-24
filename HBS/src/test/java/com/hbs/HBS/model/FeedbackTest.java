@@ -23,7 +23,7 @@ public class FeedbackTest {
     @Test
     public void testValidFeedback() {
         Feedback validFeedback = new Feedback(
-            1,
+            1,"john_doe",
             5, // Valid rating
             "This was a great service!", // Valid review
             Timestamp.valueOf("2025-03-18 12:00:00") // Created at
@@ -37,7 +37,7 @@ public class FeedbackTest {
     @Test
     public void testInvalidFeedback() {
         Feedback invalidFeedback = new Feedback(
-            0, // Invalid ID (not validated explicitly here)
+            0,"john_doe", // Invalid ID (not validated explicitly here)
             6, // Invalid rating (greater than 5)
             "", // Blank review
             null // Null createdAt
@@ -55,7 +55,7 @@ public class FeedbackTest {
 
     @Test
     public void testSettersAndGetters() {
-        Feedback feedback = new Feedback(1, 4, "Good experience!");
+        Feedback feedback = new Feedback(1,"john_doe", 4, "Good experience!");
         feedback.setRating(3);
         feedback.setReview("Average experience.");
         feedback.setCreatedAt(Timestamp.valueOf("2025-03-18 15:30:00"));
@@ -69,7 +69,7 @@ public class FeedbackTest {
     @Test
     public void testToString() {
         Feedback feedback = new Feedback(
-            1,
+            1,"john_doe",
             5,
             "Excellent service!",
             Timestamp.valueOf("2025-03-18 12:00:00")

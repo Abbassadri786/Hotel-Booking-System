@@ -31,7 +31,7 @@ public class FeedbackServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        feedback = new Feedback(1, 5, "Excellent service", new Timestamp(System.currentTimeMillis()));
+        feedback = new Feedback(1,"john_doe", 5, "Excellent service", new Timestamp(System.currentTimeMillis()));
     }
 
     @Test

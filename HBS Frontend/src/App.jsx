@@ -23,6 +23,8 @@ import Register from "./compnents/auth/Register";
 import FeedbackForm from "./compnents/feedback/FeedbackForm";
 import ExistingCustomers from "./compnents/customer/ExistingCustomers";
 import EditCustomer from "./compnents/customer/EditCustomer";
+import AboutUs from "./compnents/layout/AboutUs";
+import PrivacyPolicy from "./compnents/layout/PrivacyPolicy";
 
 function App() {
     const scriptId = "chatbot-main-script";
@@ -48,6 +50,26 @@ function App() {
         script.onload = () => setScriptLoaded(true);
         document.head.appendChild(script);
     }, []);
+
+    useEffect(() => {
+        if (!scriptLoaded) return;
+
+        const intervalId = setInterval(() => {
+            window.SendDataToChatbot({
+                bridgeName: "React Frontend",
+                threadId: "React_Frontend",
+                parentId: 'parentChatbot',
+                fullScreen: false,
+                hideCloseButton: true,
+                hideIcon: true,
+                version_id: "67c73f039a2faeb85554120c"
+            });
+        }, 300);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [scriptLoaded]);
 
     const toggleChatbot = () => {
         if (chatbotVisible) {
@@ -87,6 +109,8 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/existing-customers" element={<ExistingCustomers />} />
                     <Route path="/edit-customer/:id" element={<EditCustomer />} />
+                    <Route path="/about-us" element={<AboutUs />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 </Routes>
             </Router>
             <Footer />
