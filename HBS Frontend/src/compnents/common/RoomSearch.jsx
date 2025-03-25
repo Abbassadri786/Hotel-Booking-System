@@ -19,7 +19,6 @@ const RoomSearch = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
 
-    // Dummy validation for UI
     const checkInMoment = moment(searchQuery.checkInDate);
     const checkOutMoment = moment(searchQuery.checkOutDate);
 
@@ -32,20 +31,25 @@ const RoomSearch = () => {
       return;
     }
 
-    // Room Type Search Logic
     if (!searchQuery.roomType) {
       setErrorMessage("Please select a room type.");
       return;
     }
-    setErrorMessage(""); // Clear errors
+
+    setErrorMessage("");
     setIsLoading(true);
 
     try {
       const response = await getAvailableRooms(searchQuery.roomType);
-      setAvailableRooms([response]); // Wrap single room object into an array for rendering
+
+      if (Array.isArray(response)) {
+        setAvailableRooms(response);
+      } else {
+        setErrorMessage("Unexpected response from the server.");
+      }
     } catch (error) {
       console.error(error);
-      setErrorMessage(error.message);
+      setErrorMessage(error.message || "Error fetching rooms.");
     } finally {
       setIsLoading(false);
     }
@@ -71,7 +75,6 @@ const RoomSearch = () => {
       <Container className="shadow mt-n5 mb-5 py-5">
         <Form onSubmit={handleSearch}>
           <Row className="justify-content-center">
-            {/* Check-in Date */}
             <Col xs={12} md={3}>
               <Form.Group controlId="checkInDate">
                 <Form.Label>Check-in Date</Form.Label>
@@ -85,7 +88,6 @@ const RoomSearch = () => {
               </Form.Group>
             </Col>
 
-            {/* Check-out Date */}
             <Col xs={12} md={3}>
               <Form.Group controlId="checkOutDate">
                 <Form.Label>Check-out Date</Form.Label>
@@ -99,7 +101,6 @@ const RoomSearch = () => {
               </Form.Group>
             </Col>
 
-            {/* Room Type */}
             <Col xs={12} md={3}>
               <Form.Group controlId="roomType">
                 <Form.Label>Room Type</Form.Label>
@@ -117,10 +118,8 @@ const RoomSearch = () => {
           </Row>
         </Form>
 
-        {/* Loading */}
         {isLoading && <p className="mt-4">Finding available rooms...</p>}
 
-        {/* Room Results */}
         {!isLoading && availableRooms.length > 0 && (
           <RoomSearchResults
             results={availableRooms}
@@ -128,14 +127,12 @@ const RoomSearch = () => {
           />
         )}
 
-        {/* No Results */}
         {!isLoading && availableRooms.length === 0 && !errorMessage && (
           <p className="mt-4">
             No rooms available for the selected room type.
           </p>
         )}
 
-        {/* Error Messages */}
         {errorMessage && <p className="text-danger">{errorMessage}</p>}
       </Container>
     </>

@@ -54,10 +54,10 @@ public class RoomRepository {
         return jdbcTemplate.queryForObject(sql, roomRowMapper, id);
     }
 
-    // Read -> Get room by Type
-    public Room findByType(String roomType) {
+    // Read -> Get rooms by Type
+    public List<Room> findByType(String roomType) {
         String sql = "SELECT * FROM room WHERE roomType = ? AND isAvailable = true";
-        return jdbcTemplate.queryForObject(sql, roomRowMapper, roomType);
+        return jdbcTemplate.query(sql, roomRowMapper, roomType);
     }
 
     // Update room

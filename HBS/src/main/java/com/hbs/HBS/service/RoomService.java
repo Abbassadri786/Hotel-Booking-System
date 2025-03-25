@@ -30,9 +30,9 @@ public class RoomService {
         return roomRepository.findById(id);
     }
     // Get room by type
-    public Room getRoomByType(String roomType) {
-    	return roomRepository.findByType(roomType);
-	}
+    public List<Room> getRoomsByType(String roomType) {
+        return roomRepository.findByType(roomType);
+    }
 
     // Update room
     public int updateRoom(Room room) {

@@ -1,81 +1,56 @@
 package com.hbs.HBS.model;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.*;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import jakarta.validation.ConstraintViolation;
-
 import java.sql.Timestamp;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+class FeedbackTest {
 
-public class FeedbackTest {
+    private Feedback feedback;
+    private Validator validator;
 
-    private final Validator validator;
-
-    public FeedbackTest() {
+    @BeforeEach
+    void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        this.validator = factory.getValidator();
+        validator = factory.getValidator();
+        feedback = new Feedback(); // Initialize Feedback object
     }
 
     @Test
-    public void testValidFeedback() {
-        Feedback validFeedback = new Feedback(
-            1,"john_doe",
-            5, // Valid rating
-            "This was a great service!", // Valid review
-            Timestamp.valueOf("2025-03-18 12:00:00") // Created at
-        );
-
-        Set<ConstraintViolation<Feedback>> violations = validator.validate(validFeedback);
-
-        assertEquals(0, violations.size(), "Valid Feedback object should not have constraint violations");
-    }
-
-    @Test
-    public void testInvalidFeedback() {
-        Feedback invalidFeedback = new Feedback(
-            0,"john_doe", // Invalid ID (not validated explicitly here)
-            6, // Invalid rating (greater than 5)
-            "", // Blank review
-            null // Null createdAt
-        );
-
-        Set<ConstraintViolation<Feedback>> violations = validator.validate(invalidFeedback);
-
-        // Expecting multiple constraint violations
-        assertEquals(2, violations.size(), "Invalid Feedback object should have constraint violations");
-
-        for (ConstraintViolation<Feedback> violation : violations) {
-            System.out.println(violation.getMessage());
-        }
-    }
-
-    @Test
-    public void testSettersAndGetters() {
-        Feedback feedback = new Feedback(1,"john_doe", 4, "Good experience!");
-        feedback.setRating(3);
-        feedback.setReview("Average experience.");
-        feedback.setCreatedAt(Timestamp.valueOf("2025-03-18 15:30:00"));
+    void testGettersAndSetters() {
+        feedback.setId(1);
+        feedback.setName("John Doe");
+        feedback.setRating(5);
+        feedback.setReview("Great service!");
+        feedback.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         assertEquals(1, feedback.getId());
-        assertEquals(3, feedback.getRating());
-        assertEquals("Average experience.", feedback.getReview());
-        assertEquals(Timestamp.valueOf("2025-03-18 15:30:00"), feedback.getCreatedAt());
+        assertEquals("John Doe", feedback.getName());
+        assertEquals(5, feedback.getRating());
+        assertEquals("Great service!", feedback.getReview());
+        assertNotNull(feedback.getCreatedAt());
     }
 
     @Test
-    public void testToString() {
-        Feedback feedback = new Feedback(
-            1,"john_doe",
-            5,
-            "Excellent service!",
-            Timestamp.valueOf("2025-03-18 12:00:00")
-        );
+    void testValidation() {
+        feedback.setName(""); // Invalid name
+        feedback.setRating(0); // Invalid rating
+        feedback.setReview(""); // Invalid review
 
-        String expected = "Feedback [id=1, rating=5, review=Excellent service!, createdAt=2025-03-18 12:00:00.0]";
-        assertEquals(expected, feedback.toString());
+        Set<ConstraintViolation<Feedback>> violations = validator.validate(feedback);
+        assertEquals(3, violations.size()); // Should have 3 violations
+
+        feedback.setName("Jane Doe");
+        feedback.setRating(3);
+        feedback.setReview("Good experience.");
+
+        violations = validator.validate(feedback);
+        assertTrue(violations.isEmpty()); // Should be valid now
     }
 }

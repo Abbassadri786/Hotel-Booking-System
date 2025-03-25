@@ -59,7 +59,7 @@ const Checkout = () => {
             ) : (
               <div className="room-info">
                 <img
-                  src={`data:image/png;base64,${roomInfo.photo}`}
+                  src={`${roomInfo.photo}`}
                   alt="Room photo"
                   style={{ width: "100%", height: "200px" }}
                 />
@@ -111,8 +111,23 @@ const Checkout = () => {
           </div>
         </div>
       </section>
+
       <div className="container mb-5">
         <RoomCarousel />
+      </div>
+
+      {/* Feedback Button Section */}
+      <div className="container text-center mb-5">
+        <button
+          className="btn btn-success"
+          onClick={() => navigate("/feedback")}
+          style={{
+            fontSize: "16px",
+            padding: "10px 20px",
+          }}
+        >
+          Give Feedback!
+        </button>
       </div>
     </div>
   );

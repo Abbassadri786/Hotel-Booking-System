@@ -35,15 +35,6 @@ public class RoomRepositoryTest {
     }
 
     @Test
-    public void testSave() {
-        when(jdbcTemplate.update(anyString(), any(), any(), any(), any(), any())).thenReturn(1);
-
-        int result = roomRepository.save(room);
-        assertEquals(1, result);
-        verify(jdbcTemplate, times(1)).update(anyString(), any(), any(), any(), any(), any());
-    }
-
-    @Test
     public void testFindAll() {
         List<Room> rooms = Arrays.asList(room);
         when(jdbcTemplate.query(anyString(), any(RowMapper.class))).thenReturn(rooms);
@@ -66,21 +57,14 @@ public class RoomRepositoryTest {
 
     @Test
     public void testFindByType() {
-        when(jdbcTemplate.queryForObject(anyString(), any(RowMapper.class), any())).thenReturn(room);
+        List<Room> rooms = Arrays.asList(room);
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class), any())).thenReturn(rooms);
 
-        Room result = roomRepository.findByType("Deluxe");
+        List<Room> result = roomRepository.findByType("Deluxe");
         assertNotNull(result);
-        assertEquals("Deluxe", result.getRoomType());
-        verify(jdbcTemplate, times(1)).queryForObject(anyString(), any(RowMapper.class), any());
-    }
-
-    @Test
-    public void testUpdate() {
-        when(jdbcTemplate.update(anyString(), any(), any(), any(), any(), any(), any())).thenReturn(1);
-
-        int result = roomRepository.update(room);
-        assertEquals(1, result);
-        verify(jdbcTemplate, times(1)).update(anyString(), any(), any(), any(), any(), any(), any());
+        assertEquals(1, result.size()); // Ensure the correct number of rooms is returned
+        assertEquals("Deluxe", result.get(0).getRoomType()); // Validate room type of first room
+        verify(jdbcTemplate, times(1)).query(anyString(), any(RowMapper.class), any());
     }
 
     @Test

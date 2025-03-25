@@ -19,15 +19,6 @@ const EditRoom = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
-    setRoom((prevRoom) => ({
-      ...prevRoom,
-      photo: selectedImage ? selectedImage.name : '', // Simulate a photo URL using the file name
-    }));
-    setImagePreview(URL.createObjectURL(selectedImage));
-  };
-
   const handleRoomInputChange = (e) => {
     const { name, value } = e.target;
     setRoom((prevRoom) => ({
@@ -48,13 +39,17 @@ const EditRoom = () => {
       try {
         const roomData = await getRoomById(id);
         setRoom(roomData);
-        setImagePreview(roomData.photo); // Assuming photo is a URL
+        setImagePreview(roomData.photo);
       } catch (error) {
         console.error('Error fetching room:', error);
       }
     };
     fetchRoom();
   }, [id]);
+
+  useEffect(() => {
+    setImagePreview(room.photo);
+  }, [room.photo]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -151,23 +146,26 @@ const EditRoom = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="photo" className="form-label">Photo</label>
+              <label htmlFor="photo" className="form-label">Image URL</label>
               <input
                 className="form-control"
+                required
                 id="photo"
                 name="photo"
-                type="file"
-                onChange={handleImageChange}
+                type="text"
+                value={room.photo}
+                onChange={handleRoomInputChange}
               />
-              {imagePreview && (
-                <img
-                  src={imagePreview}
-                  alt="Preview room photo"
-                  style={{ maxWidth: '400px', maxHeight: '400px' }}
-                  className="mb-3"
-                />
-              )}
             </div>
+
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Preview room photo"
+                style={{ maxWidth: '400px', maxHeight: '400px' }}
+                className="mb-3"
+              />
+            )}
 
             <div className="d-grid justify-content-between d-md-flex mt-2">
               <button type="button" className="btn btn-outline-primary ml-5" onClick={handleBack}>

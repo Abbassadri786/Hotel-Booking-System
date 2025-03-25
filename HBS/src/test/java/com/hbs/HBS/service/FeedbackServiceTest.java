@@ -1,11 +1,8 @@
 package com.hbs.HBS.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 import com.hbs.HBS.model.Feedback;
 import com.hbs.HBS.repository.FeedbackRepository;
 
-public class FeedbackServiceTest {
+class FeedbackServiceTest {
 
     @Mock
     private FeedbackRepository feedbackRepository;
@@ -26,50 +23,45 @@ public class FeedbackServiceTest {
     @InjectMocks
     private FeedbackService feedbackService;
 
-    private Feedback feedback;
-
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
-        feedback = new Feedback(1,"john_doe", 5, "Excellent service", new Timestamp(System.currentTimeMillis()));
     }
 
     @Test
-    public void testAddFeedback() {
-        when(feedbackRepository.save(any(Feedback.class))).thenReturn(1);
-
+    void testAddFeedback() {
+        Feedback feedback = new Feedback(1, "John Doe", 5, "Excellent service!", null);
         feedbackService.addFeedback(feedback);
-
         verify(feedbackRepository, times(1)).save(feedback);
     }
 
     @Test
-    public void testGetAllFeedbacks() {
-        List<Feedback> feedbacks = Arrays.asList(feedback);
-        when(feedbackRepository.findAll()).thenReturn(feedbacks);
+    void testGetAllFeedbacks() {
+        Feedback feedback1 = new Feedback(1, "John Doe", 5, "Excellent service!", null);
+        Feedback feedback2 = new Feedback(2, "Jane Doe", 4, "Very good experience!", null);
+        when(feedbackRepository.findAll()).thenReturn(Arrays.asList(feedback1, feedback2));
 
-        List<Feedback> result = feedbackService.getAllFeedbacks();
-        assertEquals(1, result.size());
-        assertEquals(feedback, result.get(0));
-        verify(feedbackRepository, times(1)).findAll();
+        List<Feedback> feedbacks = feedbackService.getAllFeedbacks();
+        assertEquals(2, feedbacks.size());
     }
 
     @Test
-    public void testGetFeedbackById() {
-        when(feedbackRepository.findById(anyInt())).thenReturn(feedback);
+    void testGetFeedbackById() {
+        Feedback feedback = new Feedback(1, "John Doe", 5, "Excellent service!", null);
+        when(feedbackRepository.findById(1)).thenReturn(feedback);
 
-        Feedback result = feedbackService.getFeedbackById(1);
-        assertNotNull(result);
-        assertEquals(1, result.getId());
-        verify(feedbackRepository, times(1)).findById(anyInt());
+        Feedback foundFeedback = feedbackService.getFeedbackById(1);
+        assertNotNull(foundFeedback);
+        assertEquals("John Doe", foundFeedback.getName());
     }
 
     @Test
-    public void testUpdateFeedback() {
-        when(feedbackRepository.update(any(Feedback.class))).thenReturn(1);
+    void testUpdateFeedback() {
+        Feedback feedback = new Feedback(1, "John Doe", 5, "Excellent service!", null);
+        when(feedbackRepository.update(feedback)).thenReturn(1);
 
         int result = feedbackService.updateFeedback(feedback);
         assertEquals(1, result);
-        verify(feedbackRepository, times(1)).update(any(Feedback.class));
+        verify(feedbackRepository, times(1)).update(feedback);
     }
 }

@@ -41,9 +41,9 @@ public class RoomController {
         return ResponseEntity.ok(room);
     }
     @GetMapping("/roomType/{roomType}")
-    public ResponseEntity<Room> fetchRoomByType(@PathVariable String roomType) {
-        Room room = roomService.getRoomByType(roomType);
-        return ResponseEntity.ok(room);
+    public ResponseEntity<List<Room>> fetchRoomsByType(@PathVariable String roomType) {
+        List<Room> rooms = roomService.getRoomsByType(roomType);
+        return ResponseEntity.ok(rooms);
     }
 
     @PostMapping

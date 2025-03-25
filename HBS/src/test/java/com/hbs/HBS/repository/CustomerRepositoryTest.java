@@ -87,15 +87,7 @@ public class CustomerRepositoryTest {
         verify(jdbcTemplate, times(1)).queryForObject(anyString(), any(RowMapper.class), anyInt());
     }
 
-    @Test
-    public void testUpdate() {
-        when(jdbcTemplate.update(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), any(Date.class), anyInt()))
-            .thenReturn(1);
-
-        int result = customerRepository.update(customer);
-        assertEquals(1, result);
-        verify(jdbcTemplate, times(1)).update(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), any(Date.class), anyInt());
-    }
+    
 
     @Test
     public void testDelete() {

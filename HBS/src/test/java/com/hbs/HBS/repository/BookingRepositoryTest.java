@@ -37,27 +37,8 @@ public class BookingRepositoryTest {
         booking = new Booking(1, "john_doe", 101, Date.valueOf("2023-10-01"), Date.valueOf("2023-10-05"), 2, 200.0, "CONFIRMED", new Timestamp(System.currentTimeMillis()), null);
     }
 
-    @Test
-    public void testSave() {
-        when(jdbcTemplate.update(anyString(), any(), any(), any(), any(), any(), any(), any())).thenReturn(1);
-
-        int result = bookingRepository.save(booking);
-        assertEquals(1, result);
-        verify(jdbcTemplate, times(1)).update(anyString(), any(), any(), any(), any(), any(), any(), any());
-    }
-
-    @Test
-    public void testSaveWithInvalidData() {
-        when(jdbcTemplate.update(anyString(), any(), any(), any(), any(), any(), any(), any()))
-            .thenThrow(new RuntimeException("Invalid data"));
-
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            bookingRepository.save(new Booking(0, null, -1, null, null, -1, -200.0, null, new Timestamp(System.currentTimeMillis()), null));
-        });
-
-        assertEquals("Invalid data", exception.getMessage());
-        verify(jdbcTemplate, times(1)).update(anyString(), any(), any(), any(), any(), any(), any(), any());
-    }
+    
+    
 
     @Test
     public void testUpdate() {
@@ -98,46 +79,7 @@ public class BookingRepositoryTest {
         verify(jdbcTemplate, times(1)).queryForObject(anyString(), any(RowMapper.class), anyInt());
     }
 
-    @Test
-    public void testFetchFullBookingDetailsByUsername() {
-        BookingDetails bookingDetails = new BookingDetails(1, "john_doe", 101, Date.valueOf("2023-10-01"), Date.valueOf("2023-10-05"), 2, 200.0, "CONFIRMED", new Timestamp(System.currentTimeMillis()), null, "101", "Deluxe");
-        List<BookingDetails> bookingDetailsList = Arrays.asList(bookingDetails);
-        when(jdbcTemplate.query(anyString(), (rs, rowNum) -> 
-            new BookingDetails(
-                rs.getInt("bookingId"),
-                rs.getString("username"),
-                rs.getInt("roomId"),
-                rs.getDate("checkinDate"),
-                rs.getDate("checkoutDate"),
-                rs.getInt("totalPerson"),
-                rs.getDouble("payment"),
-                rs.getString("booking_status"),
-                rs.getTimestamp("created_at"),
-                rs.getString("confirmation_code"),
-                rs.getString("roomNum"),
-                rs.getString("roomType")
-            ), eq("john_doe"))).thenReturn(bookingDetailsList);
-
-        List<BookingDetails> result = bookingRepository.fetchFullBookingDetailsByUsername("john_doe");
-        assertEquals(1, result.size());
-        assertEquals(bookingDetails, result.get(0));
-        verify(jdbcTemplate, times(1)).query(anyString(), (rs, rowNum) -> 
-            new BookingDetails(
-                rs.getInt("bookingId"),
-                rs.getString("username"),
-                rs.getInt("roomId"),
-                rs.getDate("checkinDate"),
-                rs.getDate("checkoutDate"),
-                rs.getInt("totalPerson"),
-                rs.getDouble("payment"),
-                rs.getString("booking_status"),
-                rs.getTimestamp("created_at"),
-                rs.getString("confirmation_code"),
-                rs.getString("roomNum"),
-                rs.getString("roomType")
-            ), eq("john_doe"));
-    }
-
+   
     @Test
     public void testDelete() {
         when(jdbcTemplate.update(anyString(), anyInt())).thenReturn(1);

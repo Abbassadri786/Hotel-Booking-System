@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { addRoom } from '../utils/ApiFunctions';
 import RoomTypeSelector from '../common/RoomTypeSelector';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,7 @@ const AddRoom = () => {
     roomType: '',
     totalPerson: '',
     roomPrice: '',
-    isAvailable: true, // Default to true
+    isAvailable: true,
   });
 
   const [imagePreview, setImagePreview] = useState('');
@@ -26,17 +26,15 @@ const AddRoom = () => {
     }));
   };
 
+  useEffect(() => {
+    setImagePreview(newRoom.photo);
+  }, [newRoom.photo]);
+
   const handleToggleAvailability = () => {
     setNewRoom((prevRoom) => ({
       ...prevRoom,
       isAvailable: !prevRoom.isAvailable,
     }));
-  };
-
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
-    setNewRoom((prevRoom) => ({ ...prevRoom, photo: selectedImage.name })); // Using file name as photo URL simulation
-    setImagePreview(URL.createObjectURL(selectedImage));
   };
 
   const handleSubmit = async (e) => {
@@ -61,7 +59,6 @@ const AddRoom = () => {
           roomPrice: '',
           isAvailable: true,
         });
-        setImagePreview('');
         setErrorMessage('');
       } else {
         setErrorMessage('Error Adding Room');
@@ -84,8 +81,12 @@ const AddRoom = () => {
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-6">
           <h2 className="mt-5 mb-2">Add a New Room</h2>
-          {successMessage && <div className="alert alert-success fade show">{successMessage}</div>}
-          {errorMessage && <div className="alert alert-danger fade show">{errorMessage}</div>}
+          {successMessage && (
+            <div className="alert alert-success fade show">{successMessage}</div>
+          )}
+          {errorMessage && (
+            <div className="alert alert-danger fade show">{errorMessage}</div>
+          )}
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="roomNum" className="form-label">Room Number</label>
@@ -102,9 +103,10 @@ const AddRoom = () => {
 
             <div className="mb-3">
               <label htmlFor="roomType" className="form-label">Room Type</label>
-              <div>
-                <RoomTypeSelector newRoom={newRoom} handleRoomInputChange={handleRoomInputChange} />
-              </div>
+              <RoomTypeSelector
+                newRoom={newRoom}
+                handleRoomInputChange={handleRoomInputChange}
+              />
             </div>
 
             <div className="mb-3">
@@ -135,38 +137,45 @@ const AddRoom = () => {
 
             <div className="mb-3">
               <label htmlFor="isAvailable" className="form-label">Availability</label>
-              <div>
-                <button
-                  type="button"
-                  className={`btn btn-${newRoom.isAvailable ? 'success' : 'danger'}`}
-                  onClick={handleToggleAvailability}
-                >
-                  {newRoom.isAvailable ? 'Available' : 'Not Available'}
-                </button>
-              </div>
+              <button
+                type="button"
+                className={`btn btn-${newRoom.isAvailable ? 'success' : 'danger'}`}
+                onClick={handleToggleAvailability}
+              >
+                {newRoom.isAvailable ? 'Available' : 'Not Available'}
+              </button>
             </div>
 
             <div className="mb-3">
-              <label htmlFor="photo" className="form-label">Photo</label>
+              <label htmlFor="photo" className="form-label">Image URL</label>
               <input
                 className="form-control"
                 required
                 id="photo"
                 name="photo"
-                type="file"
-                onChange={handleImageChange}
+                type="text"
+                value={newRoom.photo}
+                onChange={handleRoomInputChange}
               />
-              {imagePreview && (
-                <img
-                  src={imagePreview}
-                  alt="Preview room photo"
-                  style={{ maxWidth: '400px', maxHeight: '400px' }}
-                  className="mb-3"
-                />
-              )}
             </div>
+
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Preview room photo"
+                style={{ maxWidth: '400px', maxHeight: '400px' }}
+                className="mb-3"
+              />
+            )}
+
             <div className="d-grid justify-content-between d-md-flex mt-2">
-              <button type="button" className="btn btn-outline-primary ml-5" onClick={handleBack}>Back</button>
+              <button
+                type="button"
+                className="btn btn-outline-primary ml-5"
+                onClick={handleBack}
+              >
+                Back
+              </button>
               <button className="btn btn-outline-primary">Save Room</button>
             </div>
           </form>

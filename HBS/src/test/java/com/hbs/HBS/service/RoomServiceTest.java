@@ -3,6 +3,7 @@ package com.hbs.HBS.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
@@ -35,7 +36,8 @@ public class RoomServiceTest {
 
     @Test
     public void testAddRoom() {
-        when(roomRepository.save(any(Room.class))).thenReturn(1);
+        // Test adding a room
+        doNothing().when(roomRepository).save(any(Room.class));
 
         roomService.addRoom(room);
 
@@ -44,6 +46,7 @@ public class RoomServiceTest {
 
     @Test
     public void testGetAllRooms() {
+        // Test fetching all rooms
         List<Room> rooms = Arrays.asList(room);
         when(roomRepository.findAll()).thenReturn(rooms);
 
@@ -55,6 +58,7 @@ public class RoomServiceTest {
 
     @Test
     public void testGetRoomById() {
+        // Test fetching a room by its ID
         when(roomRepository.findById(anyInt())).thenReturn(room);
 
         Room result = roomService.getRoomById(1);
@@ -64,17 +68,21 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void testGetRoomByType() {
-        when(roomRepository.findByType(anyString())).thenReturn(room);
+    public void testGetRoomsByType() {
+        // Test fetching rooms by type
+        List<Room> rooms = Arrays.asList(room);
+        when(roomRepository.findByType(anyString())).thenReturn(rooms);
 
-        Room result = roomService.getRoomByType("Deluxe");
+        List<Room> result = roomService.getRoomsByType("Deluxe");
         assertNotNull(result);
-        assertEquals("Deluxe", result.getRoomType());
+        assertEquals(1, result.size());
+        assertEquals("Deluxe", result.get(0).getRoomType());
         verify(roomRepository, times(1)).findByType(anyString());
     }
 
     @Test
     public void testUpdateRoom() {
+        // Test updating a room
         when(roomRepository.update(any(Room.class))).thenReturn(1);
 
         int result = roomService.updateRoom(room);
@@ -84,6 +92,7 @@ public class RoomServiceTest {
 
     @Test
     public void testDeleteById() {
+        // Test deleting a room by its ID
         when(roomRepository.delete(anyInt())).thenReturn(1);
 
         int result = roomService.deleteById(1);
