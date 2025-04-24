@@ -49,11 +49,6 @@ The integrated chatbot is designed to enhance user experience by offering:
 
 ---
 
-## 📌 Project Structure
-
-
----
-
 ## 📷 Screenshots (Optional)
 <!-- You can add images here if you have them -->
 <!-- ![Homepage](./screenshots/homepage.png) -->
