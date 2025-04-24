@@ -39,9 +39,7 @@ function App() {
         }
 
         const script = document.createElement("script");
-        script.setAttribute(
-            "embedToken",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiIxMzYyNyIsImNoYXRib3RfaWQiOiI2N2M3M2Y0YzhhNmZmMzFmOTgxOGU2OTMiLCJ1c2VyX2lkIjoiMTM2MjcifQ.1-9xRjQhkegm1JYaCZIuBsn9jFmNR7KbORl-riMW5P4"
+        script.setAttribute(//add embed token here
         );
         script.setAttribute("hideIcon", "true");
         script.setAttribute("hideCloseButton", "true");
